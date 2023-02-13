@@ -79,19 +79,22 @@ dirty_price_9 <- ac_9+bond_9$close_price
 dirty_price_10 <- ac_10+bond_10$close_price
 ```
 
+
+
+
 ```{r}
 #since the bond_1 matures within half a year, it is considered a zero coupon bond
-ytm_1 <- -log(bond_1$close_price/Notional)/time_to_mature_1 #ytm of the first bond
+spot_1 <- -log(bond_1$close_price/Notional)/time_to_mature_1 #ytm of the first bond
 
 #bond_2 matures within half a year, it is considered a zero coupon bond
-ytm_2 <- -log(bond_2$close_price/Notional)/time_to_mature_2 #ytm of the first bond
+spot_2 <- -log(bond_2$close_price/Notional)/time_to_mature_2 #ytm of the first bond
 
 #bond_3 matures between six months and one year
 time_next_coupon <- as.numeric(as.Date("2023-3-01")-as.Date(bond_3$date,"%m/%d/%Y"))/365
 p3_1 <- coupon_rate_3*Notional
 p3_2 <- p3_1+Notional
 r3_1 <- -log((p3_1)/Notional)/time_next_coupon
-ytm_3 <- -log((dirty_price_3-p3_1*exp(-r3_1*time_next_coupon))/p3_2)/(time_next_coupon+1/2)
+spot_3 <- -log((dirty_price_3-p3_1*exp(-r3_1*time_next_coupon))/p3_2)/(time_next_coupon+1/2)
 
 #bond_4 has two coupon payments before mature
 p4_c <- coupon_rate_4*Notional
@@ -102,7 +105,7 @@ seg4_1 <- p4_c*exp(-r4_1*time_next_coupon)
 r4_2 <- -log((p4_c)/Notional)/(time_next_coupon+1/2)
 seg4_2 <- p4_c*exp(-r4_2*(time_next_coupon+1/2))
 
-ytm_4 <- -log((dirty_price_4-seg4_1-seg4_2)/p4_end)/(time_next_coupon+1)
+spot_4 <- -log((dirty_price_4-seg4_1-seg4_2)/p4_end)/(time_next_coupon+1)
 
 #bond_5 has 3 coupon payments before mature
 p5_c <- coupon_rate_5*Notional
@@ -117,7 +120,7 @@ seg5_2 <- p5_c*exp(-r5_2*(time_next_coupon+1/2))
 r5_3 <- -log((p5_c)/Notional)/(time_next_coupon+1)
 seg5_3 <- p5_c*exp(-r5_3*(time_next_coupon+1))
 
-ytm_5 <- -log((dirty_price_5-seg5_1-seg5_2-seg5_3)/p5_end)/(time_next_coupon+3/2)
+spot_5 <- -log((dirty_price_5-seg5_1-seg5_2-seg5_3)/p5_end)/(time_next_coupon+3/2)
 
 #bond_6 has 4 coupon payments before maturity
 p6_c <- coupon_rate_6*Notional
@@ -135,7 +138,7 @@ seg6_3 <- p6_c*exp(-r6_3*(time_next_coupon+1))
 r6_4 <- -log((p6_c)/Notional)/(time_next_coupon+3/2)
 seg6_4 <- p6_c*exp(-r6_4*(time_next_coupon+3/2))
 
-ytm_6 <- -log((dirty_price_6-seg6_1-seg6_2-seg6_3-seg6_4)/p6_end)/(time_next_coupon+2)
+spot_6 <- -log((dirty_price_6-seg6_1-seg6_2-seg6_3-seg6_4)/p6_end)/(time_next_coupon+2)
 
 #bond_7 has 5 coupon payments before maturity
 p7_c <- coupon_rate_7*Notional
@@ -156,7 +159,7 @@ seg7_4 <- p7_c*exp(-r7_4*(time_next_coupon+3/2))
 r7_5 <- -log((p7_c)/Notional)/(time_next_coupon+2)
 seg7_5 <- p7_c*exp(-r7_5*(time_next_coupon+2))
 
-ytm_7 <- -log((dirty_price_7-seg7_1-seg7_2-seg7_3-seg7_4-seg7_5)/p7_end)/(time_next_coupon+5/2)
+spot_7 <- -log((dirty_price_7-seg7_1-seg7_2-seg7_3-seg7_4-seg7_5)/p7_end)/(time_next_coupon+5/2)
 
 #bond_8 has 6 coupon payments before maturity
 p8_c <- coupon_rate_8*Notional
@@ -180,7 +183,7 @@ seg8_5 <- p8_c*exp(-r8_5*(time_next_coupon+2))
 r8_6 <- -log((p8_c)/Notional)/(time_next_coupon+5/2)
 seg8_6 <- p8_c*exp(-r8_6*(time_next_coupon+5/2))
 
-ytm_8 <- -log((dirty_price_8-seg8_1-seg8_2-seg8_3-seg8_4-seg8_5-seg8_6)/p8_end)/(time_next_coupon+3)
+spot_8 <- -log((dirty_price_8-seg8_1-seg8_2-seg8_3-seg8_4-seg8_5-seg8_6)/p8_end)/(time_next_coupon+3)
 
 #bond_9 has 7 coupon payments before maturity
 p9_c <- coupon_rate_9*Notional
@@ -207,7 +210,7 @@ seg9_6 <- p9_c*exp(-r9_6*(time_next_coupon+5/2))
 r9_7 <- -log((p9_c)/Notional)/(time_next_coupon+3)
 seg9_7 <- p9_c*exp(-r9_7*(time_next_coupon+3))
 
-ytm_9 <- -log((dirty_price_9-seg9_1-seg9_2-seg9_3-seg9_4-seg9_5-seg9_6-seg9_7)/p9_end)/(time_next_coupon+7/2)
+spot_9 <- -log((dirty_price_9-seg9_1-seg9_2-seg9_3-seg9_4-seg9_5-seg9_6-seg9_7)/p9_end)/(time_next_coupon+7/2)
 
 #bond_10 has 8 coupon payments before maturity
 p10_c <- coupon_rate_10*Notional
@@ -237,99 +240,13 @@ seg10_7 <- p10_c*exp(-r10_7*(time_next_coupon+3))
 r10_8 <- -log((p10_c)/Notional)/(time_next_coupon+7/2)
 seg10_8 <- p10_c*exp(-r10_8*(time_next_coupon+7/2))
 
-ytm_10 <- -log((dirty_price_10-seg10_1-seg10_2-seg10_3-seg10_4-seg10_5-seg10_6-seg10_7-seg10_8)/p10_end)/(time_next_coupon+4)
+spot_10 <- -log((dirty_price_10-seg10_1-seg10_2-seg10_3-seg10_4-seg10_5-seg10_6-seg10_7-seg10_8)/p10_end)/(time_next_coupon+4)
 
 
 ```
 
 ```{r}
 #plot the ytm w.r.t. date 
-Jan_16 <- c(ytm_1[1],ytm_2[1],ytm_3[1],ytm_4[1],ytm_5[1],ytm_6[1],ytm_7[1],ytm_8[1],ytm_9[1],ytm_10[1])
-Jan_17 <- c(ytm_1[2],ytm_2[2],ytm_3[2],ytm_4[2],ytm_5[2],ytm_6[2],ytm_7[2],ytm_8[2],ytm_9[2],ytm_10[2])
-Jan_18 <- c(ytm_1[3],ytm_2[3],ytm_3[3],ytm_4[3],ytm_5[3],ytm_6[3],ytm_7[3],ytm_8[3],ytm_9[3],ytm_10[3])
-Jan_19 <- c(ytm_1[4],ytm_2[4],ytm_3[4],ytm_4[4],ytm_5[4],ytm_6[4],ytm_7[4],ytm_8[4],ytm_9[4],ytm_10[4])
-Jan_20 <- c(ytm_1[5],ytm_2[5],ytm_3[5],ytm_4[5],ytm_5[5],ytm_6[5],ytm_7[5],ytm_8[5],ytm_9[5],ytm_10[5])
-Jan_23 <- c(ytm_1[6],ytm_2[6],ytm_3[6],ytm_4[6],ytm_5[6],ytm_6[6],ytm_7[6],ytm_8[6],ytm_9[6],ytm_10[6])
-Jan_24 <- c(ytm_1[7],ytm_2[7],ytm_3[7],ytm_4[7],ytm_5[7],ytm_6[7],ytm_7[7],ytm_8[7],ytm_9[7],ytm_10[7])
-Jan_25 <- c(ytm_1[8],ytm_2[8],ytm_3[8],ytm_4[8],ytm_5[8],ytm_6[8],ytm_7[8],ytm_8[8],ytm_9[8],ytm_10[8])
-Jan_26 <- c(ytm_1[9],ytm_2[9],ytm_3[9],ytm_4[9],ytm_5[9],ytm_6[9],ytm_7[9],ytm_8[9],ytm_9[9],ytm_10[9])
-Jan_27 <- c(ytm_1[10],ytm_2[10],ytm_3[10],ytm_4[10],ytm_5[10],ytm_6[10],ytm_7[10],ytm_8[10],ytm_9[10],ytm_10[10])
-
-time <- c(as.Date("2023-3-1"),as.Date("2023-6-1"),as.Date("2024-3-1"),as.Date("2024-9-1"),as.Date("2025-3-1"),as.Date("2025-9-1"),as.Date("2026-3-1"),as.Date("2026-9-1"),as.Date("2027-3-1"),as.Date("2027-9-1"))
-
-plot(x=time,y=Jan_16,type = "o",col="black",main="Yield Curve",xlab = "time",ylab = "yield to maturity")
-lines(time, Jan_17, type = "o",col="blue")
-lines(time, Jan_18, type = "o",col="red")
-lines(time, Jan_19, type = "o",col="green")
-lines(time, Jan_20, type = "o",col="yellow")
-lines(time, Jan_23, type = "o",col="brown")
-lines(time, Jan_24, type = "o",col="pink")
-lines(time, Jan_25, type = "o",col="purple")
-lines(time, Jan_26, type = "o",col="orange")
-lines(time, Jan_27, type = "o",col="azure")
-
-legend("topright",c("Jan 16","Jan 17","Jan 18","Jan 19","Jan 20","Jan 23","Jan 24","Jan 25","Jan 26","Jan 27"),fill=c("black","blue","red","green","yellow","brown","pink","purple","orange","azure"))
-```
-```{r}
-#spot rates
-spot_1 <- (Notional/bond_1$close_price)^(1/time_to_mature_1)-1
-spot_2 <- (Notional/bond_2$close_price)^(1/time_to_mature_2)-1
-
-spot_seg3_1 <- (p3_1)/(1+spot_1)^(1/time_next_coupon)
-spot_3 <- (Notional/(dirty_price_3-spot_seg3_1))^(1/(time_next_coupon+1/2))-1
-
-spot_seg4_1 <- (p4_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg4_2 <- (p4_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_4 <- (Notional/(dirty_price_4-spot_seg4_1-spot_seg4_2))^(1/(time_next_coupon+1))-1
-
-spot_seg5_1 <- (p5_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg5_2 <- (p5_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_seg5_3 <- (p5_c)/(1+spot_4)^(1/(time_next_coupon+1))
-spot_5 <- (Notional/(dirty_price_5-spot_seg5_1-spot_seg5_2-spot_seg5_3))^(1/(time_next_coupon+3/2))-1
-
-spot_seg6_1 <- (p6_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg6_2 <- (p6_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_seg6_3 <- (p6_c)/(1+spot_4)^(1/(time_next_coupon+1))
-spot_seg6_4 <- (p6_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
-spot_6 <- (Notional/(dirty_price_6-spot_seg6_1-spot_seg6_2-spot_seg6_3-spot_seg6_4))^(1/(time_next_coupon+2))-1
-
-spot_seg7_1 <- (p7_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg7_2 <- (p7_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_seg7_3 <- (p7_c)/(1+spot_4)^(1/(time_next_coupon+1))
-spot_seg7_4 <- (p7_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
-spot_seg7_5 <- (p7_c)/(1+spot_6)^(1/(time_next_coupon+2))
-spot_7 <- (Notional/(dirty_price_7-spot_seg7_1-spot_seg7_2-spot_seg7_3-spot_seg7_4-spot_seg7_5))^(1/(time_next_coupon+5/2))-1
-
-spot_seg8_1 <- (p8_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg8_2 <- (p8_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_seg8_3 <- (p8_c)/(1+spot_4)^(1/(time_next_coupon+1))
-spot_seg8_4 <- (p8_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
-spot_seg8_5 <- (p8_c)/(1+spot_6)^(1/(time_next_coupon+2))
-spot_seg8_6 <- (p8_c)/(1+spot_7)^(1/(time_next_coupon+5/2))
-spot_8 <- (Notional/(dirty_price_8-spot_seg8_1-spot_seg8_2-spot_seg8_3-spot_seg8_4-spot_seg8_5))^(1/(time_next_coupon+3))-1
-
-spot_seg9_1 <- (p9_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg9_2 <- (p9_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_seg9_3 <- (p9_c)/(1+spot_4)^(1/(time_next_coupon+1))
-spot_seg9_4 <- (p9_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
-spot_seg9_5 <- (p9_c)/(1+spot_6)^(1/(time_next_coupon+2))
-spot_seg9_6 <- (p9_c)/(1+spot_7)^(1/(time_next_coupon+5/2))
-spot_seg9_7 <- (p9_c)/(1+spot_8)^(1/(time_next_coupon+3))
-spot_9 <- (Notional/(dirty_price_9-spot_seg9_1-spot_seg9_2-spot_seg9_3-spot_seg9_4-spot_seg9_5))^(1/(time_next_coupon+7/2))-1
-
-spot_seg10_1 <- (p10_c)/(1+spot_1)^(1/time_next_coupon)
-spot_seg10_2 <- (p10_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
-spot_seg10_3 <- (p10_c)/(1+spot_4)^(1/(time_next_coupon+1))
-spot_seg10_4 <- (p10_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
-spot_seg10_5 <- (p10_c)/(1+spot_6)^(1/(time_next_coupon+2))
-spot_seg10_6 <- (p10_c)/(1+spot_7)^(1/(time_next_coupon+5/2))
-spot_seg10_7 <- (p10_c)/(1+spot_8)^(1/(time_next_coupon+3))
-spot_seg10_8 <- (p10_c)/(1+spot_9)^(1/(time_next_coupon+7/2))
-spot_10 <- (Notional/(dirty_price_10-spot_seg10_1-spot_seg10_2-spot_seg10_3-spot_seg10_4-spot_seg10_5))^(1/(time_next_coupon+4))-1
-```
-
-```{r}
-#plot the spot curve w.r.t date
 spot_Jan_16 <- c(spot_1[1],spot_2[1],spot_3[1],spot_4[1],spot_5[1],spot_6[1],spot_7[1],spot_8[1],spot_9[1],spot_10[1])
 spot_Jan_17 <- c(spot_1[2],spot_2[2],spot_3[2],spot_4[2],spot_5[2],spot_6[2],spot_7[2],spot_8[2],spot_9[2],spot_10[2])
 spot_Jan_18 <- c(spot_1[3],spot_2[3],spot_3[3],spot_4[3],spot_5[3],spot_6[3],spot_7[3],spot_8[3],spot_9[3],spot_10[3])
@@ -340,6 +257,8 @@ spot_Jan_24 <- c(spot_1[7],spot_2[7],spot_3[7],spot_4[7],spot_5[7],spot_6[7],spo
 spot_Jan_25 <- c(spot_1[8],spot_2[8],spot_3[8],spot_4[8],spot_5[8],spot_6[8],spot_7[8],spot_8[8],spot_9[8],spot_10[8])
 spot_Jan_26 <- c(spot_1[9],spot_2[9],spot_3[9],spot_4[9],spot_5[9],spot_6[9],spot_7[9],spot_8[9],spot_9[9],spot_10[9])
 spot_Jan_27 <- c(spot_1[10],spot_2[10],spot_3[10],spot_4[10],spot_5[10],spot_6[10],spot_7[10],spot_8[10],spot_9[10],spot_10[10])
+
+time <- c(as.Date("2023-3-1"),as.Date("2023-6-1"),as.Date("2024-3-1"),as.Date("2024-9-1"),as.Date("2025-3-1"),as.Date("2025-9-1"),as.Date("2026-3-1"),as.Date("2026-9-1"),as.Date("2027-3-1"),as.Date("2027-9-1"))
 
 plot(x=time,y=spot_Jan_16,type = "o",col="black",main="Spot Curve",xlab = "time",ylab = "spot rate")
 lines(time, spot_Jan_17, type = "o",col="blue")
@@ -352,44 +271,92 @@ lines(time, spot_Jan_25, type = "o",col="purple")
 lines(time, spot_Jan_26, type = "o",col="orange")
 lines(time, spot_Jan_27, type = "o",col="azure")
 
+
 legend("topright",c("Jan 16","Jan 17","Jan 18","Jan 19","Jan 20","Jan 23","Jan 24","Jan 25","Jan 26","Jan 27"),fill=c("black","blue","red","green","yellow","brown","pink","purple","orange","azure"))
 ```
 ```{r}
-#forward curve
-forward_rate_1 <- -((log(dirty_price_3)-log(bond_1$close_price))/1)
-forward_rate_2 <- -((log(dirty_price_4)-log(bond_1$close_price))/(3/2))
-forward_rate_3 <- -((log(dirty_price_5)-log(bond_1$close_price))/2)
-forward_rate_4 <- -((log(dirty_price_6)-log(bond_1$close_price))/(5/2))
-forward_rate_5 <- -((log(dirty_price_7)-log(bond_1$close_price))/3)
-forward_rate_6 <- -((log(dirty_price_8)-log(bond_1$close_price))/(7/2))
-forward_rate_7 <- -((log(dirty_price_9)-log(bond_1$close_price))/4)
-forward_rate_8 <- -((log(dirty_price_10)-log(bond_1$close_price))/(9/2))
+#yield to maturity rates
+ytm_1 <- (Notional/bond_1$close_price)^(1/time_to_mature_1)-1
+ytm_2 <- (Notional/bond_2$close_price)^(1/time_to_mature_2)-1
 
-#plot
-for_Jan_16 <- c(forward_rate_1[1],forward_rate_2[1],forward_rate_3[1],forward_rate_4[1],forward_rate_5[1],forward_rate_6[1],forward_rate_7[1],forward_rate_8[1])
-for_Jan_17 <- c(forward_rate_1[2],forward_rate_2[2],forward_rate_3[2],forward_rate_4[2],forward_rate_5[2],forward_rate_6[2],forward_rate_7[2],forward_rate_8[2])
-for_Jan_18 <- c(forward_rate_1[3],forward_rate_2[3],forward_rate_3[3],forward_rate_4[3],forward_rate_5[3],forward_rate_6[3],forward_rate_7[3],forward_rate_8[3])
-for_Jan_19 <- c(forward_rate_1[4],forward_rate_2[4],forward_rate_3[4],forward_rate_4[4],forward_rate_5[4],forward_rate_6[4],forward_rate_7[4],forward_rate_8[4])
-for_Jan_20 <- c(forward_rate_1[5],forward_rate_2[5],forward_rate_3[5],forward_rate_4[5],forward_rate_5[5],forward_rate_6[5],forward_rate_7[5],forward_rate_8[5])
-for_Jan_23 <- c(forward_rate_1[6],forward_rate_2[6],forward_rate_3[6],forward_rate_4[6],forward_rate_5[6],forward_rate_6[6],forward_rate_7[6],forward_rate_8[6])
-for_Jan_24 <- c(forward_rate_1[7],forward_rate_2[7],forward_rate_3[7],forward_rate_4[7],forward_rate_5[7],forward_rate_6[7],forward_rate_7[7],forward_rate_8[7])
-for_Jan_25 <- c(forward_rate_1[8],forward_rate_2[8],forward_rate_3[8],forward_rate_4[8],forward_rate_5[8],forward_rate_6[8],forward_rate_7[8],forward_rate_8[8])
-for_Jan_26 <- c(forward_rate_1[9],forward_rate_2[9],forward_rate_3[9],forward_rate_4[9],forward_rate_5[9],forward_rate_6[9],forward_rate_7[9],forward_rate_8[9])
-for_Jan_27 <- c(forward_rate_1[10],forward_rate_2[10],forward_rate_3[10],forward_rate_4[10],forward_rate_5[10],forward_rate_6[10],forward_rate_7[10],forward_rate_8[10])
+spot_seg3_1 <- (p3_1)/(1+spot_1)^(1/time_next_coupon)
+ytm_3 <- (Notional/(dirty_price_3-spot_seg3_1))^(1/(time_next_coupon+1/2))-1
 
-forward_time <- c(1,1.5,2,2.5,3,3.5,4,4.5)
+spot_seg4_1 <- (p4_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg4_2 <- (p4_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+ytm_4 <- (Notional/(dirty_price_4-spot_seg4_1-spot_seg4_2))^(1/(time_next_coupon+1))-1
 
-plot(x=forward_time,y=for_Jan_16,type = "o",col="black",main="Forward Curve",xlab = "time difference",ylab = "forward rate")
-lines(forward_time, for_Jan_17, type = "o",col="blue")
-lines(forward_time, for_Jan_18, type = "o",col="red")
-lines(forward_time, for_Jan_19, type = "o",col="green")
-lines(forward_time, for_Jan_20, type = "o",col="yellow")
-lines(forward_time, for_Jan_23, type = "o",col="brown")
-lines(forward_time, for_Jan_24, type = "o",col="pink")
-lines(forward_time, for_Jan_25, type = "o",col="purple")
-lines(forward_time, for_Jan_26, type = "o",col="orange")
-lines(forward_time, for_Jan_27, type = "o",col="azure")
+spot_seg5_1 <- (p5_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg5_2 <- (p5_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+spot_seg5_3 <- (p5_c)/(1+spot_4)^(1/(time_next_coupon+1))
+ytm_5 <- (Notional/(dirty_price_5-spot_seg5_1-spot_seg5_2-spot_seg5_3))^(1/(time_next_coupon+3/2))-1
 
+spot_seg6_1 <- (p6_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg6_2 <- (p6_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+spot_seg6_3 <- (p6_c)/(1+spot_4)^(1/(time_next_coupon+1))
+spot_seg6_4 <- (p6_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
+ytm_6 <- (Notional/(dirty_price_6-spot_seg6_1-spot_seg6_2-spot_seg6_3-spot_seg6_4))^(1/(time_next_coupon+2))-1
+
+spot_seg7_1 <- (p7_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg7_2 <- (p7_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+spot_seg7_3 <- (p7_c)/(1+spot_4)^(1/(time_next_coupon+1))
+spot_seg7_4 <- (p7_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
+spot_seg7_5 <- (p7_c)/(1+spot_6)^(1/(time_next_coupon+2))
+ytm_7 <- (Notional/(dirty_price_7-spot_seg7_1-spot_seg7_2-spot_seg7_3-spot_seg7_4-spot_seg7_5))^(1/(time_next_coupon+5/2))-1
+
+spot_seg8_1 <- (p8_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg8_2 <- (p8_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+spot_seg8_3 <- (p8_c)/(1+spot_4)^(1/(time_next_coupon+1))
+spot_seg8_4 <- (p8_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
+spot_seg8_5 <- (p8_c)/(1+spot_6)^(1/(time_next_coupon+2))
+spot_seg8_6 <- (p8_c)/(1+spot_7)^(1/(time_next_coupon+5/2))
+ytm_8 <- (Notional/(dirty_price_8-spot_seg8_1-spot_seg8_2-spot_seg8_3-spot_seg8_4-spot_seg8_5))^(1/(time_next_coupon+3))-1
+
+spot_seg9_1 <- (p9_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg9_2 <- (p9_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+spot_seg9_3 <- (p9_c)/(1+spot_4)^(1/(time_next_coupon+1))
+spot_seg9_4 <- (p9_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
+spot_seg9_5 <- (p9_c)/(1+spot_6)^(1/(time_next_coupon+2))
+spot_seg9_6 <- (p9_c)/(1+spot_7)^(1/(time_next_coupon+5/2))
+spot_seg9_7 <- (p9_c)/(1+spot_8)^(1/(time_next_coupon+3))
+ytm_9 <- (Notional/(dirty_price_9-spot_seg9_1-spot_seg9_2-spot_seg9_3-spot_seg9_4-spot_seg9_5))^(1/(time_next_coupon+7/2))-1
+
+spot_seg10_1 <- (p10_c)/(1+spot_1)^(1/time_next_coupon)
+spot_seg10_2 <- (p10_c)/(1+spot_3)^(1/(time_next_coupon+1/2))
+spot_seg10_3 <- (p10_c)/(1+spot_4)^(1/(time_next_coupon+1))
+spot_seg10_4 <- (p10_c)/(1+spot_5)^(1/(time_next_coupon+3/2))
+spot_seg10_5 <- (p10_c)/(1+spot_6)^(1/(time_next_coupon+2))
+spot_seg10_6 <- (p10_c)/(1+spot_7)^(1/(time_next_coupon+5/2))
+spot_seg10_7 <- (p10_c)/(1+spot_8)^(1/(time_next_coupon+3))
+spot_seg10_8 <- (p10_c)/(1+spot_9)^(1/(time_next_coupon+7/2))
+ytm_10 <- (Notional/(dirty_price_10-spot_seg10_1-spot_seg10_2-spot_seg10_3-spot_seg10_4-spot_seg10_5))^(1/(time_next_coupon+4))-1
+```
+
+```{r}
+#plot the spot curve w.r.t date
+
+Jan_16 <- c(ytm_1[1],ytm_2[1],ytm_3[1],ytm_4[1],ytm_5[1],ytm_6[1],ytm_7[1],ytm_8[1],ytm_9[1],ytm_10[1])
+Jan_17 <- c(ytm_1[2],ytm_2[2],ytm_3[2],ytm_4[2],ytm_5[2],ytm_6[2],ytm_7[2],ytm_8[2],ytm_9[2],ytm_10[2])
+Jan_18 <- c(ytm_1[3],ytm_2[3],ytm_3[3],ytm_4[3],ytm_5[3],ytm_6[3],ytm_7[3],ytm_8[3],ytm_9[3],ytm_10[3])
+Jan_19 <- c(ytm_1[4],ytm_2[4],ytm_3[4],ytm_4[4],ytm_5[4],ytm_6[4],ytm_7[4],ytm_8[4],ytm_9[4],ytm_10[4])
+Jan_20 <- c(ytm_1[5],ytm_2[5],ytm_3[5],ytm_4[5],ytm_5[5],ytm_6[5],ytm_7[5],ytm_8[5],ytm_9[5],ytm_10[5])
+Jan_23 <- c(ytm_1[6],ytm_2[6],ytm_3[6],ytm_4[6],ytm_5[6],ytm_6[6],ytm_7[6],ytm_8[6],ytm_9[6],ytm_10[6])
+Jan_24 <- c(ytm_1[7],ytm_2[7],ytm_3[7],ytm_4[7],ytm_5[7],ytm_6[7],ytm_7[7],ytm_8[7],ytm_9[7],ytm_10[7])
+Jan_25 <- c(ytm_1[8],ytm_2[8],ytm_3[8],ytm_4[8],ytm_5[8],ytm_6[8],ytm_7[8],ytm_8[8],ytm_9[8],ytm_10[8])
+Jan_26 <- c(ytm_1[9],ytm_2[9],ytm_3[9],ytm_4[9],ytm_5[9],ytm_6[9],ytm_7[9],ytm_8[9],ytm_9[9],ytm_10[9])
+Jan_27 <- c(ytm_1[10],ytm_2[10],ytm_3[10],ytm_4[10],ytm_5[10],ytm_6[10],ytm_7[10],ytm_8[10],ytm_9[10],ytm_10[10])
+
+plot(x=time,y=Jan_16,type = "o",col="black",main="Yield-to-maturity Curve",xlab = "time",ylab = "ytm")
+
+lines(time, Jan_17, type = "o",col="blue")
+lines(time, Jan_18, type = "o",col="red")
+lines(time, Jan_19, type = "o",col="green")
+lines(time, Jan_20, type = "o",col="yellow")
+lines(time, Jan_23, type = "o",col="brown")
+lines(time, Jan_24, type = "o",col="pink")
+lines(time, Jan_25, type = "o",col="purple")
+lines(time, Jan_26, type = "o",col="orange")
+lines(time, Jan_27, type = "o",col="azure")
 legend("topright",c("Jan 16","Jan 17","Jan 18","Jan 19","Jan 20","Jan 23","Jan 24","Jan 25","Jan 26","Jan 27"),fill=c("black","blue","red","green","yellow","brown","pink","purple","orange","azure"))
 ```
 
@@ -426,6 +393,7 @@ lines(forward_time, forr_Jan_26, type = "o",col="orange")
 lines(forward_time, forr_Jan_27, type = "o",col="azure")
 
 legend("topright",c("Jan 16","Jan 17","Jan 18","Jan 19","Jan 20","Jan 23","Jan 24","Jan 25","Jan 26","Jan 27"),fill=c("black","blue","red","green","yellow","brown","pink","purple","orange","azure"))
+
 ```
 ```{r}
 X_1 <-log(ytm_1[-c(1)]/ytm_1[-c(10)])
@@ -435,14 +403,16 @@ X_4 <-log(ytm_4[-c(1)]/ytm_1[-c(10)])
 X_5 <-log(ytm_5[-c(1)]/ytm_1[-c(10)])
 X <- cbind(X_1,X_2,X_3,X_4,X_5)
 Cov_X <- cov(X)
+Cov_X
 
-Y_1 <- -log(forward_rate_1[-c(1)]/forward_rate_1[-c(10)])
-Y_2 <- -log(forward_rate_2[-c(1)]/forward_rate_2[-c(10)])
-Y_3 <- -log(forward_rate_3[-c(1)]/forward_rate_3[-c(10)])
-Y_4 <- -log(forward_rate_4[-c(1)]/forward_rate_4[-c(10)])
-Y_5 <- -log(forward_rate_5[-c(1)]/forward_rate_5[-c(10)])
+Y_1 <- -log(for_rate_1[-c(1)]/for_rate_1[-c(10)])
+Y_2 <- -log(for_rate_2[-c(1)]/for_rate_2[-c(10)])
+Y_3 <- -log(for_rate_3[-c(1)]/for_rate_3[-c(10)])
+Y_4 <- -log(for_rate_4[-c(1)]/for_rate_4[-c(10)])
+Y_5 <- -log(for_rate_5[-c(1)]/for_rate_5[-c(10)])
 Y <- cbind(Y_1,Y_2,Y_3,Y_4,Y_5)
 Cov_Y <- cov(Y)
+Cov_Y
 ```
 
 ```{r}
